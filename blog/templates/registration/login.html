@@ -1,0 +1,43 @@
+{% extends 'blog/_layout/base.html' %}
+
+{% load blog_filters %}
+{#{% block menu_subcategories %}#}
+{#    {% for subcategory in ""|get_subcategories:8 %}#}
+{#        {% if subcategory|length > 0 %}#}
+{#            <a href="{% url 'blog:article_list_category_subcategory' subcategory.category_id subcategory.id %}"#}
+{#               class="list-group-item">{{ subcategory.name }} Jaja</a>#}
+{#        {% endif %}#}
+{#    {% endfor %}#}
+{#{% endblock %}#}
+
+
+{% block content %}
+    <h1>Log-in</h1>
+    {#    <li class="google">#}
+    <div class="social-sizes">
+        <a class="btn-primary btn-block btn-sm btn-social-icon btn-google"
+           href="{% url "social:begin" "google-oauth2" %}">
+            {#            <span class="fa fa-google"></span>#}
+            <i class="fa fa-google"></i>
+            Sign in with Google
+        </a>
+    </div>
+    {#    </li>#}
+    {% if form.errors %}
+        <p>
+            Usuario y/o password no coinciden
+            Intenta de nuevo
+        </p>
+    {% else %}
+        Utiliza el siguiente Log-in:
+    {% endif %}
+    <div class="login-form">
+        <form action="{% url 'login' %}" method="post">
+            <p><a href="{% url 'password_reset' %}">¿Olvidaste tu password?</a></p>
+            {{ form.as_p }}
+            {% csrf_token %}
+            <input type="hidden" value="{{ next }}" name="next"/>
+            <p><input type="submit" value="Log in"></p>
+        </form>
+    </div>
+{% endblock %}

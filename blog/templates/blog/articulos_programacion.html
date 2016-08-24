@@ -1,0 +1,46 @@
+{% extends '_layout/base.html' %}
+{% load blog_filters %}
+
+{% block title %}
+Artículos
+{% endblock %}
+{% block head-title %}
+Lista de articulos
+{% endblock %}
+{% block None%}
+Esta es una pagina de contenido de articulos de programacion Software-Hardware.
+   {% for post in posts  %}
+       {% if post.published %}
+            <a href="{% url 'blog:articulo_detalle' post.pk%}">
+                <h3>{{ post.title|title }}</h3>
+                <p>{{ post.created_at }} | {{ post.author }}</p>
+                <p>{{ post.body|safe|truncatewords_html:"15" }}</p>
+            </a>
+           <img src='{{ imgs_by_id|dict_by_key:post.pk }}' style="width:150px;height: auto">
+       {% endif %}
+   {% endfor %}
+
+{% endblock %}
+{% block content %}
+    <h1>hello there</h1>
+    {% for post in posts|slice:':15' %}
+        <div class="col-sm-4 col-lg-4 col-md-4">
+{#            <div class="thumbnail"></div>#}
+            <div class="content">
+                <div class="grid">
+                    <figure class="effect-oscar">
+                        <img src="{{ imgs_by_id|dict_by_key:post.pk }}" alt="img10">
+                        <figcaption>
+                            <h2><span> {{ post.title }}</span></h2>
+                            <p> {{ post.body|just_text_safe|truncatewords_html:15|safe}}</p>
+                            <a href="{% url "blog:articulo_detalle" post.pk %}">View more</a>
+                        </figcaption>
+                    </figure>
+                </div>
+            </div>
+        </div>
+
+    {% endfor %}
+
+{% endblock %}
+

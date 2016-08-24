@@ -1,0 +1,18 @@
+{% extends 'blog/_layout/base.html' %}
+{% load blog_filters %}
+
+{% block page_name %}
+Create a post
+{% endblock %}
+
+{% block content %}
+    <h2>Crea un artículo:</h2>
+    <form action="." method="post">
+        {{ form.media }}
+        {{ form.as_p }}
+        {% csrf_token %}
+        <input type="submit" value="Crea Post">
+
+    </form>
+{% endblock %}
+

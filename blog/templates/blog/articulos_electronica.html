@@ -1,0 +1,24 @@
+{% extends '_layout/base.html' %}
+
+{% load blog_filters %}
+{% block title %}
+Artículos
+{% endblock %}
+{% block head-title %}
+Lista de articulos
+{% endblock %}
+{% block content %}
+Esta es una pagina de contenido de articulos de programacion Software-Hardware.
+   {% for post in posts  %}
+       {% if post.published %}
+            <a href="{% url 'blog:articulo_detalle' post.pk%}">
+                <h3>{{ post.title }}</h3>
+                <p>{{ post.created_at }} | {{ post.author }}</p>
+                <p>{{ post.body|just_text_safe|safe|truncatewords:"20"}}</p>
+            </a>
+       {% endif %}
+       <img src='{{ imgs_by_id|dict_by_key:post.pk }}' style="width:150px;height: 150px">
+   {% endfor %}
+
+{% endblock %}
+

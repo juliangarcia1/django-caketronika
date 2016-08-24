@@ -1,0 +1,15 @@
+{% extends '_layout/base.html' %}
+
+{% block title %}
+    Login
+{% endblock %}
+
+{% block content %}
+    <h1>Log-in</h1>
+    <p>Logeate para acceder</p>
+    <form action="." method="post">
+        {{ form.as_p }}
+        {% csrf_token %}
+        <input type="submit" value="Log-in">
+    </form>
+{% endblock %}

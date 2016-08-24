@@ -1,0 +1,94 @@
+{% extends 'blog/_layout/base.html' %}
+{% load blog_filters %}
+
+{% block script_comments %}
+    <script>
+        $(document).ready(function () {
+            function get_comments() {
+                $('#get_comments').click(function (event) {
+                    event.preventDefault();
+                    $.post({% url 'blog:ajax_send_comments' post.pk%},
+                            function (response) {
+                                html_string = ''
+                                $.each(JSON.parse(response), function (key, value) {
+                                    html_string += '<h4>' + key + ':' + value;
+                                });
+                                $('#show_comments').innerHTML;
+                            }
+                    );
+                });
+            }
+        });
+    </script>
+{% endblock %}
+
+{% block edition_buttons %}
+    {% if user.is_authenticated %}
+        {% if user == post.author %}
+            <a href="{% url 'blog:edit_post' post.pk %}" class="btn btn-default">Edita</a>
+        {% endif %}
+        <a href="{% url 'blog:list_user_posts' %}" class="btn btn-default">Mis Posts</a>
+        <a href="{% url 'blog:create_post' %}" class="btn btn-default">Articulo Nuevo</a>
+    {% endif %}
+{% endblock %}
+
+
+{% block content %}
+    {% if request.user == post.author  or post.published %}
+        <h1>{{ post.title }}</h1>
+        <p>{{ post.created_at }} | {{ post.author.first_name|title }} {{ post.author.last_name|title }}</p>
+        <p>{{ post.body|safe }}</p>
+        <h4>Comentarios:</h4>
+        <hr>
+        <div id="show_comments">
+
+        </div>
+
+        {% if comments %}
+            <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#all_comments">Muestra
+                comentarios({{ comments.count }})
+            </button>
+            <br>
+            <br>
+        {% else %}
+            <button  type="button" class="btn btn-default" data-toggle="collapse" data-target="#all_comments">Muestra
+                comentarios(0)
+            </button>
+            <br>
+            <br>
+        {% endif %}
+        <div id="all_comments" class="collapse">
+            {% if comments %}
+                {% for comment in comments %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <p>{{ comment.title|title }}</p>
+                            <p>{{ comment.author.first_name|default:comment.author|title }}
+                                {{ comment.author.last_name|default:""|title }} | {{ comment.created_at }}</p>
+                        </div>
+                        <div class="panel-body">
+                            <p>{{ comment.body }}</p>
+                        </div>
+                    </div>
+{#                    <hr>#}
+                {% endfor %}
+            {% endif %}
+        </div>
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                    <p class="bg-danger">{{ message }} </p>
+                {% else %}
+                    <p class="bg-info">{{ message }}</p>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        <form action="" method="post">
+            {{ comment_form.as_p }}
+            {% csrf_token %}
+            <input type="submit" value="Enviar">
+        </form>
+
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'blog/_layout/base.html' %}
+
+{% load blog_filters %}
+{% block menu_categories %}
+    {% for category in "categories"|get_categories:5 %}
+        <li>
+            <a href="{% url 'blog:article_list_category'  category.id  %}">{{ category.name}}</a>
+        </li>
+    {% endfor %}
+{% endblock %}
+{% block menu_subcategories %}
+    {% for subcategory in ""|get_subcategories:8 %}
+            <a href="{% url 'blog:article_list_category_subcategory'  subcategory.category_id subcategory.id  %}" class="list-group-item"> {{ subcategory.name}}   </a>
+    {% endfor %}
+{% endblock %}
+
+
+{% block title %}
+    Log-out
+{% endblock %}
+
+{% block content %}
+    <h1>Logged out</h1>
+    <p>Has cerrado sesión exitosamente. Puedes <a href="{% url 'login' %} ">iniciar sesión nuevamente</a>.</p>
+{% endblock %}

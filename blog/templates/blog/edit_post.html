@@ -1,0 +1,32 @@
+{% extends 'blog/_layout/base.html' %}
+{% load blog_filters %}
+{#{% block menu_categories %}#}
+{#    {% for category in "categories"|get_categories:5 %}#}
+{#        <li>#}
+{#            <a href="{% url 'blog:article_list_category'  category.id  %}">{{ category.name}}</a>#}
+{#        </li>#}
+{#    {% endfor %}#}
+{#{% endblock %}#}
+{#{% block menu_subcategories %}#}
+{#    {% for subcategory in ""|get_subcategories:8 %}#}
+{#            <a href="{% url 'blog:article_list_category_subcategory'  subcategory.category_id subcategory.id  %}" class="list-group-item">{{ subcategory.name }}</a>#}
+{#    {% endfor %}#}
+{#{% endblock %}#}
+{% block edition_buttons %}
+    {% if user.is_authenticated %}
+        <a href="{% url 'blog:list_user_posts' %}" class="btn btn-default">Mis Posts</a>
+        <a href="{% url 'blog:create_post' %}" class="btn btn-default">Articulo Nuevo</a>
+    {% endif %}
+{% endblock %}
+{% block title %}
+Edita tu artículo
+{% endblock %}
+
+{% block content %}
+    <form action="" method="post">
+        {{ form.media }}
+        {{ form.as_p }}
+        {% csrf_token %}
+        <input type="submit" value="Salvar">
+    </form>
+{% endblock %}
